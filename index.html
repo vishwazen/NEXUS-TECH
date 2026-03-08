@@ -4772,7 +4772,8 @@ section, div, header, footer, nav, main, article, aside {
 // =============================================
 // SFX — sound/clicksound.mp3 (preloaded, zero delay)
 const SFX = (function(){
-  var FILE = 'sound/clicksound.mp3';
+  var FILE = 'sound/clicksound.mp3'; // ← path இங்க மாத்து
+  // Preload pool of 4 audio elements for instant, overlap-free playback
   var pool = [], idx = 0;
   for(var i=0;i<4;i++){
     var a = new Audio(FILE);
@@ -4780,18 +4781,14 @@ const SFX = (function(){
     a.volume  = 0.25;
     pool.push(a);
   }
-  var unlocked = false;
-  function unlock(){
-    if(unlocked) return; unlocked = true;
-    pool.forEach(function(a){ a.play().then(function(){ a.pause(); a.currentTime=0; }).catch(function(){}); });
-    document.removeEventListener('touchstart',unlock,true);
-    document.removeEventListener('mousedown',unlock,true);
-  }
-  document.addEventListener('touchstart',unlock,true);
-  document.addEventListener('mousedown',unlock,true);
   return {
     play: function(){
-      try{ var a=pool[idx%pool.length]; idx++; a.currentTime=0; a.play().catch(function(){}); }catch(e){}
+      try{
+        var a = pool[idx % pool.length];
+        idx++;
+        a.currentTime = 0;
+        a.play().catch(function(){});
+      }catch(e){}
     },
     reset: function(){}
   };
