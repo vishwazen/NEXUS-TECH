@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>NEXUS TECH 2K26 | Asian College of Engineering and Technology</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Bebas+Neue&family=Black+Ops+One&display=swap" rel="stylesheet">
+<style>html{opacity:0;transition:opacity 0.3s ease;}html.fonts-ready{opacity:1;}</style>
+<script>
+  function markFontsReady(){document.documentElement.classList.add('fonts-ready');}
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(markFontsReady);}else{markFontsReady();}
+  setTimeout(markFontsReady,2000);
+</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <style>
@@ -1319,9 +1326,9 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
 /* ── Profile circle: TOP CENTER, hero-themed bg ── */
 .creator-front-circle{
   position:absolute;
-  top:36px;left:50%;
+  top:40%;left:50%;
   bottom:auto;
-  transform:translateX(-50%);
+  transform:translate(-50%,-50%);
   width:76px;height:76px;
   border-radius:50%;
   overflow:hidden;
@@ -1333,12 +1340,12 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
   transition:transform 0.3s ease;
 }
 .creator-card:hover .creator-front-circle{
-  transform:translateX(-50%) scale(1.07);
+  transform:translate(-50%,-50%) scale(1.07);
   animation:arcReactorPulse 1.4s ease-in-out infinite;
 }
 .creator-front-circle img{
   width:100%;height:100%;
-  object-fit:cover;object-position:center top;display:block;
+  object-fit:cover;object-position:center center;display:block;
 }
 .creator-front-circle svg{width:100%;height:100%;display:block;}
 
@@ -1387,10 +1394,10 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
 
 /* Iron Man — arc reactor power-up: scale from 0 with gold/red burst */
 @keyframes ironmanCircleIn{
-  0%  {opacity:0;transform:translateX(-50%) scale(0) rotate(-30deg);box-shadow:0 0 0 0 rgba(239,35,60,0);}
-  45% {opacity:1;transform:translateX(-50%) scale(1.18) rotate(6deg);box-shadow:0 0 60px 20px rgba(239,35,60,0.7),0 0 100px 40px rgba(240,180,41,0.4);}
-  70% {transform:translateX(-50%) scale(0.94) rotate(-2deg);}
-  100%{opacity:1;transform:translateX(-50%) scale(1) rotate(0deg);}
+  0%  {opacity:0;transform:translate(-50%,-50%) scale(0) rotate(-30deg);box-shadow:0 0 0 0 rgba(239,35,60,0);}
+  45% {opacity:1;transform:translate(-50%,-50%) scale(1.18) rotate(6deg);box-shadow:0 0 60px 20px rgba(239,35,60,0.7),0 0 100px 40px rgba(240,180,41,0.4);}
+  70% {transform:translate(-50%,-50%) scale(0.94) rotate(-2deg);}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg);}
 }
 @keyframes ironmanTextIn{
   0%  {opacity:0;transform:translateY(28px);}
@@ -1400,11 +1407,11 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
 
 /* Thor — lightning strike from top: drop from above with blue flash */
 @keyframes thorCircleIn{
-  0%  {opacity:0;transform:translateX(-50%) translateY(-80px) scale(0.6);filter:brightness(3) saturate(0);}
-  30% {opacity:1;transform:translateX(-50%) translateY(10px) scale(1.15);filter:brightness(2.5) saturate(1) drop-shadow(0 0 40px #58d8ff);}
-  55% {transform:translateX(-50%) translateY(-5px) scale(0.97);}
-  75% {transform:translateX(-50%) translateY(3px) scale(1.02);}
-  100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1);filter:brightness(1) saturate(1);}
+  0%  {opacity:0;transform:translate(-50%,calc(-50% - 80px)) scale(0.6);filter:brightness(3) saturate(0);}
+  30% {opacity:1;transform:translate(-50%,calc(-50% + 10px)) scale(1.15);filter:brightness(2.5) saturate(1) drop-shadow(0 0 40px #58d8ff);}
+  55% {transform:translate(-50%,calc(-50% - 5px)) scale(0.97);}
+  75% {transform:translate(-50%,calc(-50% + 3px)) scale(1.02);}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:brightness(1) saturate(1);}
 }
 @keyframes thorTextIn{
   0%  {opacity:0;transform:translateY(-20px);filter:brightness(3);}
@@ -1414,10 +1421,10 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
 
 /* Spider-Man — web-swing from right */
 @keyframes spidyCircleIn{
-  0%  {opacity:0;transform:translateX(calc(-50% + 120px)) translateY(-40px) rotate(25deg) scale(0.7);}
-  40% {opacity:1;transform:translateX(calc(-50% - 10px)) translateY(6px) rotate(-4deg) scale(1.12);}
-  65% {transform:translateX(calc(-50% + 4px)) translateY(-3px) rotate(2deg) scale(0.97);}
-  100%{opacity:1;transform:translateX(-50%) translateY(0) rotate(0deg) scale(1);}
+  0%  {opacity:0;transform:translate(calc(-50% + 120px),calc(-50% - 40px)) rotate(25deg) scale(0.7);}
+  40% {opacity:1;transform:translate(calc(-50% - 10px),calc(-50% + 6px)) rotate(-4deg) scale(1.12);}
+  65% {transform:translate(calc(-50% + 4px),calc(-50% - 3px)) rotate(2deg) scale(0.97);}
+  100%{opacity:1;transform:translate(-50%,-50%) rotate(0deg) scale(1);}
 }
 @keyframes spidyTextIn{
   0%  {opacity:0;transform:translateX(40px) rotate(4deg);}
@@ -1427,10 +1434,10 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
 
 /* Black Panther — vibranium shimmer: fade in with purple wave */
 @keyframes pantherCircleIn{
-  0%  {opacity:0;transform:translateX(-50%) scale(1.5);filter:saturate(0) brightness(0.2);}
+  0%  {opacity:0;transform:translate(-50%,-50%) scale(1.5);filter:saturate(0) brightness(0.2);}
   30% {filter:saturate(2) brightness(1.8) drop-shadow(0 0 32px #b464ff);}
-  60% {opacity:1;transform:translateX(-50%) scale(0.95);filter:saturate(1.3) brightness(1.1);}
-  100%{opacity:1;transform:translateX(-50%) scale(1);filter:saturate(1) brightness(1);}
+  60% {opacity:1;transform:translate(-50%,-50%) scale(0.95);filter:saturate(1.3) brightness(1.1);}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:saturate(1) brightness(1);}
 }
 @keyframes pantherTextIn{
   0%  {opacity:0;transform:scaleX(0.4);filter:saturate(0);}
@@ -1507,12 +1514,12 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
   .creator-card{width:145px;height:215px;border-radius:10px;}
   .creator-front-circle{
     width:64px;height:64px;
-    top:16px;left:50%;
+    top:40%;left:50%;
     bottom:auto;
-    transform:translateX(-50%);
+    transform:translate(-50%,-50%);
   }
   .creator-card:hover .creator-front-circle{
-    transform:translateX(-50%) scale(1.07);
+    transform:translate(-50%,-50%) scale(1.07);
   }
   .creator-front-info{top:auto;bottom:0;padding:8px 6px 10px 6px;align-items:center;text-align:center;gap:2px;}
   .creator-name{font-size:11px;letter-spacing:1px;}
@@ -1522,7 +1529,7 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
 }
 @media(max-width:360px){
   .creator-card{width:130px;height:195px;}
-  .creator-front-circle{width:56px;height:56px;top:14px;bottom:auto;}
+  .creator-front-circle{width:56px;height:56px;top:40%;left:50%;bottom:auto;transform:translate(-50%,-50%);}
   .creator-front-info{top:auto;bottom:0;}
   .creator-name{font-size:10px;}
 }
@@ -2781,7 +2788,7 @@ a, button, [onclick]{
   .creators-inner{ max-width:100%; }
   .creators-grid{ display:flex!important; flex-wrap:wrap!important; gap:12px!important; justify-content:center!important; }
   .creator-card{ width:145px!important; height:215px!important; }
-  .creator-front-circle{ width:64px!important; height:64px!important; top:16px!important; bottom:auto!important; }
+  .creator-front-circle{ width:64px!important; height:64px!important; top:40%!important; left:50%!important; bottom:auto!important; transform:translate(-50%,-50%)!important; }
   .creator-front-info{ top:auto!important; bottom:0!important; }
   .creator-name{ font-size:10px!important; letter-spacing:1px; }
   .creator-role{ font-size:9px!important; margin-bottom:6px!important; }
@@ -3907,7 +3914,7 @@ section, div, header, footer, nav, main, article, aside {
                 <div class="creator-num-badge">04</div>
               </div>
               <div class="creator-front-circle">
-                <img src="neethi_circle.jpg" alt="Neethiazagan" onerror="this.outerHTML='<svg viewBox=&quot;0 0 100 100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;50&quot; fill=&quot;#0d0820&quot;/><circle cx=&quot;50&quot; cy=&quot;35&quot; r=&quot;17&quot; fill=&quot;#b464ff&quot; opacity=&quot;0.9&quot;/><ellipse cx=&quot;50&quot; cy=&quot;76&quot; rx=&quot;27&quot; ry=&quot;17&quot; fill=&quot;#b464ff&quot; opacity=&quot;0.78&quot;/></svg>'">
+                <img src="creators/neethi.jpg" alt="Neethiazagan" style="object-position:center 20%;" onerror="this.outerHTML='<svg viewBox=&quot;0 0 100 100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;50&quot; fill=&quot;#0d0820&quot;/><circle cx=&quot;50&quot; cy=&quot;35&quot; r=&quot;17&quot; fill=&quot;#b464ff&quot; opacity=&quot;0.9&quot;/><ellipse cx=&quot;50&quot; cy=&quot;76&quot; rx=&quot;27&quot; ry=&quot;17&quot; fill=&quot;#b464ff&quot; opacity=&quot;0.78&quot;/></svg>'">
               </div>
               <div class="creator-front-info">
                 <div class="creator-hero-badge">🐾 Black Panther</div>
@@ -3917,7 +3924,7 @@ section, div, header, footer, nav, main, article, aside {
               </div>
             </div>
           </div>
-          <script type="application/json" class="creator-data">{"name": "Neethiazagan", "hero": "Black Panther", "hc": "180,100,255", "img": "neethibg", "role": "Visual Designer", "dialogues": [{"who": "Black Panther", "line": "In Wakanda we craft with vibranium. Neethiazagan crafts with pixels. I am no longer sure which is stronger.", "speaker": true}]}</script>
+          <script type="application/json" class="creator-data">{"name": "Neethiazagan", "hero": "Black Panther", "hc": "180,100,255", "img": "creators/neethi bg.jpg", "role": "Visual Designer", "dialogues": [{"who": "Black Panther", "line": "In Wakanda we craft with vibranium. Neethiazagan crafts with pixels. I am no longer sure which is stronger.", "speaker": true}]}</script>
         </div>
     </div>
   </section>
@@ -4765,8 +4772,7 @@ section, div, header, footer, nav, main, article, aside {
 // =============================================
 // SFX — sound/clicksound.mp3 (preloaded, zero delay)
 const SFX = (function(){
-  var FILE = 'sound/clicksound.mp3'; // ← path இங்க மாத்து
-  // Preload pool of 4 audio elements for instant, overlap-free playback
+  var FILE = 'sound/clicksound.mp3';
   var pool = [], idx = 0;
   for(var i=0;i<4;i++){
     var a = new Audio(FILE);
@@ -4774,14 +4780,18 @@ const SFX = (function(){
     a.volume  = 0.25;
     pool.push(a);
   }
+  var unlocked = false;
+  function unlock(){
+    if(unlocked) return; unlocked = true;
+    pool.forEach(function(a){ a.play().then(function(){ a.pause(); a.currentTime=0; }).catch(function(){}); });
+    document.removeEventListener('touchstart',unlock,true);
+    document.removeEventListener('mousedown',unlock,true);
+  }
+  document.addEventListener('touchstart',unlock,true);
+  document.addEventListener('mousedown',unlock,true);
   return {
     play: function(){
-      try{
-        var a = pool[idx % pool.length];
-        idx++;
-        a.currentTime = 0;
-        a.play().catch(function(){});
-      }catch(e){}
+      try{ var a=pool[idx%pool.length]; idx++; a.currentTime=0; a.play().catch(function(){}); }catch(e){}
     },
     reset: function(){}
   };
