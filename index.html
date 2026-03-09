@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\\\\\\\\<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -353,7 +353,6 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
   background:linear-gradient(90deg,var(--red-bright),var(--gold-bright));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-/* ── Mute Button — fixed below JARVIS chatbot ── *
 
 #hamburger{
   background:none;border:none;cursor:pointer;
@@ -4777,26 +4776,6 @@ section, div, header, footer, nav, main, article, aside {
 // GLOBAL MUTE STATE
 var SITE_MUTED = false;
 
-function toggleMute(){
-  SITE_MUTED = !SITE_MUTED;
-  var btn  = document.getElementById('mute-btn');
-  var icon = document.getElementById('mute-icon');
-  if(SITE_MUTED){
-    btn.classList.add('muted');
-    icon.className = 'fas fa-volume-xmark';
-    btn.title = 'Unmute';
-  } else {
-    btn.classList.remove('muted');
-    icon.className = 'fas fa-volume-high';
-    btn.title = 'Mute';
-  }
-  // Mute/unmute all live Audio elements on the page
-  document.querySelectorAll('audio').forEach(function(a){ a.muted = SITE_MUTED; });
-  // Mute/unmute background video
-  var bgVid = document.getElementById('global-bg-iframe');
-  if(bgVid) bgVid.muted = SITE_MUTED;
-}
-
 // SFX — sound/clicksound.mp3 (preloaded, zero delay)
 const SFX = (function(){
   var FILE = 'sound/clicksound.mp3'; // ← path இங்க மாத்து
@@ -5538,7 +5517,7 @@ document.addEventListener('keydown', function(e){
 <style>
 /* ── JARVIS Fab Button — Robot ── */
 #jarvis-fab{
-  position:fixed;bottom:80px;right:24px;z-index:999999;
+  position:fixed;bottom:24px;right:24px;z-index:999999;
   width:46px;height:46px;
   background:none;border:none;padding:0;
   cursor:pointer;
@@ -5580,7 +5559,7 @@ document.addEventListener('keydown', function(e){
 
 /* ── JARVIS Chat Window ── */
 #jarvis-window{
-  position:fixed;bottom:136px;right:24px;z-index:999999;
+  position:fixed;bottom:80px;right:24px;z-index:999999;
   width:min(360px,calc(100vw - 32px));
   height:min(520px,70vh);
   border-radius:20px;overflow:hidden;
@@ -5774,15 +5753,11 @@ document.addEventListener('keydown', function(e){
 .jarvis-suggestion:hover{background:rgba(88,216,255,0.14);color:#fff;}
 
 @media(max-width:480px){
-  #jarvis-fab{bottom:74px;right:16px;width:52px;height:52px;}
-  #jarvis-window{bottom:136px;right:16px;width:calc(100vw - 32px);height:min(500px,72vh);}
+  #jarvis-fab{bottom:16px;right:16px;width:52px;height:52px;}
+  #jarvis-window{bottom:78px;right:16px;width:calc(100vw - 32px);height:min(500px,72vh);}
 }
 </style>
 
-<!-- MUTE BUTTON — below chatbot -->
-<button id="mute-btn" onclick="toggleMute()" aria-label="Toggle sound" title="Mute / Unmute">
-  <i class="fas fa-volume-high" id="mute-icon"></i>
-</button>
 
 <!-- JARVIS FAB — Robot Chatbot Icon -->
 <button id="jarvis-fab" onclick="toggleJarvis()" aria-label="Open JARVIS">
