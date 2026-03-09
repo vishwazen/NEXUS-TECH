@@ -4067,7 +4067,7 @@ section, div, header, footer, nav, main, article, aside {
                 </div>
               </div>
             </div>
-            <div class="ev-card ev-tech" onclick="toggleEvCard(this)">
+            <div class="ev-card ev-tech" id="ev-prompt-forge" onclick="toggleEvCard(this)">
               <img class="ev-img" src="img/Prompt_forge.jpg" alt="Prompt Forge" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="ev-img-fallback" style="display:none;background:#050e18;">
                 <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
@@ -4186,7 +4186,7 @@ section, div, header, footer, nav, main, article, aside {
                 </div>
               </div>
             </div>
-            <div class="ev-card ev-tech" onclick="toggleEvCard(this)">
+            <div class="ev-card ev-tech" id="ev-logo-design" onclick="toggleEvCard(this)">
               <img class="ev-img" src="img/Logo_creation.jpg" alt="Logo Design" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="ev-img-fallback" style="display:none;background:#050e18;">
                 <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
@@ -4245,7 +4245,7 @@ section, div, header, footer, nav, main, article, aside {
               </div>
             </div>
             <!-- Ultron Creation -->
-            <div class="ev-card ev-tech" onclick="toggleEvCard(this)">
+            <div class="ev-card ev-tech" id="ev-ultron-creation" onclick="toggleEvCard(this)">
               <img class="ev-img" src="img/ultron_creation.jpg" alt="Ultron Creation" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="ev-img-fallback" style="display:none;background:#0a0510;">
                 <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
@@ -4314,7 +4314,7 @@ section, div, header, footer, nav, main, article, aside {
         <div class="event-section-bg" style="background-image:url('Multiverse_chellange.jpg')"></div>
         <div class="event-section-inner">
           <div class="ev-grid">
-            <div class="ev-card ev-nontech" onclick="toggleEvCard(this)">
+            <div class="ev-card ev-nontech" id="ev-infinity-stone-hunt" onclick="toggleEvCard(this)">
               <img class="ev-img" src="img/Infinity_Stone_hunt.jpg" alt="Connection" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="ev-img-fallback" style="display:none;background:#100508;">
                 <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
@@ -4375,7 +4375,7 @@ section, div, header, footer, nav, main, article, aside {
                 </div>
               </div>
             </div>
-            <div class="ev-card ev-nontech" onclick="toggleEvCard(this)">
+            <div class="ev-card ev-nontech" id="ev-multiverse-challenge" onclick="toggleEvCard(this)">
               <img class="ev-img" src="img/Multiverse_chellange.jpg" alt="Treasure Hunt" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="ev-img-fallback" style="display:none;background:#100508;">
                 <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
@@ -4424,7 +4424,7 @@ section, div, header, footer, nav, main, article, aside {
                 </div>
               </div>
             </div>
-            <div class="ev-card ev-nontech" onclick="toggleEvCard(this)">
+            <div class="ev-card ev-nontech" id="ev-octa-arena" onclick="toggleEvCard(this)">
               <img class="ev-img" src="img/Octa_arena.jpg" alt="8²" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="ev-img-fallback" style="display:none;background:#100508;">
                 <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
@@ -6413,5 +6413,164 @@ Respond concisely and in JARVIS character (2-4 sentences unless a list is needed
 })();
 </script>
 
+
+<script>
+// =============================================
+// BACK BUTTON / BROWSER HISTORY SUPPORT
+// Intercepts panel switches, tab changes, glass
+// open, and ev-card opens so the mobile back
+// button navigates within the site instead of
+// closing it.
+// =============================================
+(function(){
+  'use strict';
+
+  // ── Apply a saved state object to the UI (no extra push) ──
+  function applyState(state) {
+    if (!state) state = { panel: 'main-page' };
+
+    // Close any expanded event cards first
+    document.querySelectorAll('.ev-card.ev-active')
+      .forEach(function(c){ c.classList.remove('ev-active'); });
+
+    // Show the correct panel
+    var panelId = state.panel || 'main-page';
+    ['main-page', 'events-panel', 'contacts-panel'].forEach(function(pid){
+      var el = document.getElementById(pid);
+      if (!el) return;
+      if (pid === panelId){
+        el.classList.remove('panel-hidden');
+        el.classList.add('panel-visible');
+      } else {
+        el.classList.add('panel-hidden');
+        el.classList.remove('panel-visible');
+      }
+    });
+
+    // Close nav menu
+    if (typeof closeMenu === 'function') closeMenu();
+
+    // Restore events sub-state
+    if (panelId === 'events-panel') {
+      var tabId = state.tab || 'events-overview';
+      document.querySelectorAll('.tab-pane')
+        .forEach(function(p){ p.classList.remove('active'); });
+      var tabEl = document.getElementById(tabId);
+      if (tabEl) tabEl.classList.add('active');
+
+      var container = document.getElementById('glass-container');
+      if (container){
+        if (state.glassOpen) container.classList.add('is-open');
+        else                 container.classList.remove('is-open');
+      }
+
+      // Re-open an ev-card if it was open when state was pushed
+      if (state.evCard){
+        var evEl = document.getElementById(state.evCard);
+        if (evEl) evEl.classList.add('ev-active');
+      }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Wrap showMain ──
+  var _showMain = showMain;
+  showMain = function(){
+    _showMain();
+    history.pushState({ panel: 'main-page' }, '');
+  };
+
+  // ── Wrap showEvents ──
+  var _showEvents = showEvents;
+  showEvents = function(){
+    _showEvents();
+    history.pushState(
+      { panel: 'events-panel', tab: 'events-overview', glassOpen: false }, ''
+    );
+  };
+
+  // ── Wrap showContacts ──
+  var _showContacts = showContacts;
+  showContacts = function(){
+    _showContacts();
+    history.pushState({ panel: 'contacts-panel' }, '');
+  };
+
+  // ── Wrap switchTabByName (category tab selected) ──
+  var _switchTabByName = switchTabByName;
+  switchTabByName = function(tabId){
+    _switchTabByName(tabId);
+    history.pushState(
+      { panel: 'events-panel', tab: tabId, glassOpen: true }, ''
+    );
+  };
+
+  // ── Wrap showEventsOverview (back-to-overview button) ──
+  var _showEventsOverview = showEventsOverview;
+  showEventsOverview = function(){
+    _showEventsOverview();
+    history.pushState(
+      { panel: 'events-panel', tab: 'events-overview', glassOpen: true }, ''
+    );
+  };
+
+  // ── Wrap handleGlassContainerClick (first tap opens glass) ──
+  var _handleGlassContainerClick = handleGlassContainerClick;
+  handleGlassContainerClick = function(e){
+    var container = document.getElementById('glass-container');
+    var wasOpen = container && container.classList.contains('is-open');
+    _handleGlassContainerClick(e);
+    if (!wasOpen && container && container.classList.contains('is-open')){
+      var activePane = document.querySelector('.tab-pane.active');
+      var currentTab = activePane ? activePane.id : 'events-overview';
+      if (currentTab === 'events-overview'){
+        history.pushState(
+          { panel: 'events-panel', tab: 'events-overview', glassOpen: true }, ''
+        );
+      }
+    }
+  };
+
+  // ── Wrap toggleEvCard (opening an event detail pushes state) ──
+  var _toggleEvCard = toggleEvCard;
+  toggleEvCard = function(card){
+    _toggleEvCard(card);
+    if (card.classList.contains('ev-active')){
+      var activePane = document.querySelector('.tab-pane.active');
+      history.pushState({
+        panel:     'events-panel',
+        tab:       activePane ? activePane.id : null,
+        glassOpen: true,
+        evCard:    card.id || null
+      }, '');
+    }
+  };
+
+  // ── Wrap closeEvCard (x button on ev-card: pop back) ──
+  var _closeEvCard = closeEvCard;
+  closeEvCard = function(btn){
+    _closeEvCard(btn);
+    history.back();
+  };
+
+  // ── popstate: browser back/forward pressed ──
+  window.addEventListener('popstate', function(e){
+    applyState(e.state);
+  });
+
+  // ── Seed history so the very first back press doesn't leave the page ──
+  (function seed(){
+    if (document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', function(){
+        history.replaceState({ panel: 'main-page' }, '');
+      });
+    } else {
+      history.replaceState({ panel: 'main-page' }, '');
+    }
+  })();
+
+})();
+</script>
 </body>
 </html>
