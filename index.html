@@ -353,6 +353,29 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
   background:linear-gradient(90deg,var(--red-bright),var(--gold-bright));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
+/* ── Mute Button — fixed below JARVIS chatbot ── */
+#mute-btn{
+  position:fixed;
+  bottom:24px;right:24px;
+  z-index:999998;
+  background:rgba(5,5,8,0.82);
+  border:1px solid rgba(239,35,60,0.4);
+  cursor:pointer;
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--red-bright);font-size:14px;
+  transition:background 0.2s,border-color 0.2s,color 0.2s,transform 0.2s;
+  outline:none;-webkit-tap-highlight-color:transparent;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 2px 12px rgba(0,0,0,0.5);
+}
+#mute-btn:hover{ background:rgba(239,35,60,0.15); transform:scale(1.1); }
+#mute-btn.muted{ border-color:rgba(200,150,12,0.5); color:var(--gold); }
+#mute-btn.muted:hover{ background:rgba(200,150,12,0.12); }
+@media(max-width:480px){
+  #mute-btn{ width:32px;height:32px;font-size:12px;bottom:16px;right:16px; }
+}
+
 #hamburger{
   background:none;border:none;cursor:pointer;
   width:44px;height:44px;
@@ -3314,28 +3337,28 @@ section, div, header, footer, nav, main, article, aside {
 <!-- DROPDOWN MENU -->
 <div id="nav-menu">
   <ul>
-    <li><a href="#" onclick="navHome()">
+    <li><a href="javascript:void(0)" onclick="navHome();return false;">
       <span class="nav-icon-box icon-home"><i class="fas fa-house"></i></span> Home
     </a></li>
-    <li><a href="#" onclick="navEvents()">
+    <li><a href="javascript:void(0)" onclick="navEvents();return false;">
       <span class="nav-icon-box icon-events"><i class="fas fa-bolt"></i></span> Events
     </a></li>
-    <li><a href="#" onclick="navAbout()">
+    <li><a href="javascript:void(0)" onclick="navAbout();return false;">
       <span class="nav-icon-box icon-about"><i class="fas fa-circle-info"></i></span> About
     </a></li>
-    <li><a href="#" onclick="navRefresh()">
+    <li><a href="javascript:void(0)" onclick="navRefresh();return false;">
       <span class="nav-icon-box icon-refresh"><i class="fas fa-utensils"></i></span> Refreshments
     </a></li>
-    <li><a href="#" onclick="navCoord()">
+    <li><a href="javascript:void(0)" onclick="navCoord();return false;">
       <span class="nav-icon-box icon-coord"><i class="fas fa-users"></i></span> Coordinators
     </a></li>
-    <li><a href="#" onclick="navCreators()">
+    <li><a href="javascript:void(0)" onclick="navCreators();return false;">
       <span class="nav-icon-box icon-creator"><i class="fas fa-shield-halved"></i></span> Creators
     </a></li>
-    <li><a href="#" onclick="navCollege()">
+    <li><a href="javascript:void(0)" onclick="navCollege();return false;">
       <span class="nav-icon-box icon-college"><i class="fas fa-location-dot"></i></span> College
     </a></li>
-    <li><a href="#" onclick="navContacts()">
+    <li><a href="javascript:void(0)" onclick="navContacts();return false;">
       <span class="nav-icon-box icon-contact"><i class="fas fa-envelope"></i></span> Contacts
     </a></li>
   </ul>
@@ -4246,7 +4269,7 @@ section, div, header, footer, nav, main, article, aside {
             </div>
             <!-- Ultron Creation -->
             <div class="ev-card ev-tech" id="ev-ultron-creation" onclick="toggleEvCard(this)">
-              <img class="ev-img" src="img/Ultron_creation.jpg" alt="Ultron Creation" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <img class="ev-img" src="img/ultron_creation.jpg" alt="Ultron Creation" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="ev-img-fallback" style="display:none;background:#0a0510;">
                 <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
                   <defs><radialGradient id="ulbg" cx="50%" cy="40%" r="65%"><stop offset="0%" stop-color="#1a0a2a"/><stop offset="100%" stop-color="#050508"/></radialGradient></defs>
@@ -4772,6 +4795,29 @@ section, div, header, footer, nav, main, article, aside {
 // =============================================
 // =============================================
 // =============================================
+// GLOBAL MUTE STATE
+var SITE_MUTED = false;
+
+function toggleMute(){
+  SITE_MUTED = !SITE_MUTED;
+  var btn  = document.getElementById('mute-btn');
+  var icon = document.getElementById('mute-icon');
+  if(SITE_MUTED){
+    btn.classList.add('muted');
+    icon.className = 'fas fa-volume-xmark';
+    btn.title = 'Unmute';
+  } else {
+    btn.classList.remove('muted');
+    icon.className = 'fas fa-volume-high';
+    btn.title = 'Mute';
+  }
+  // Mute/unmute all live Audio elements on the page
+  document.querySelectorAll('audio').forEach(function(a){ a.muted = SITE_MUTED; });
+  // Mute/unmute background video
+  var bgVid = document.getElementById('global-bg-iframe');
+  if(bgVid) bgVid.muted = SITE_MUTED;
+}
+
 // SFX — sound/clicksound.mp3 (preloaded, zero delay)
 const SFX = (function(){
   var FILE = 'sound/clicksound.mp3'; // ← path இங்க மாத்து
@@ -4785,13 +4831,16 @@ const SFX = (function(){
   }
   return {
     play: function(){
+      if(SITE_MUTED) return; // respect global mute
       try{
         var a = pool[idx % pool.length];
         idx++;
         a.currentTime = 0;
+        a.muted = SITE_MUTED;
         a.play().catch(function(){});
       }catch(e){}
     },
+    mute: function(state){ pool.forEach(function(a){ a.muted = state; }); },
     reset: function(){}
   };
 })();
@@ -5076,29 +5125,34 @@ function showEventsOverview(){
 // =============================================
 // NAV ACTIONS
 // =============================================
-function navHome(){ showMain(); }
-function navEvents(){ showEvents(); }
-function navContacts(){ showContacts(); }
+function navHome(){ showMain(); closeMenu(); }
+function navEvents(){ showEvents(); closeMenu(); }
+function navContacts(){ showContacts(); closeMenu(); }
 
-function navCoord(){ showMain();
-  setTimeout(()=>{ document.getElementById('coordinators').scrollIntoView({behavior:'smooth'}); },100);
+function navCoord(){
   closeMenu();
+  showMain();
+  setTimeout(function(){ var el=document.getElementById('coordinators'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 200);
 }
-function navCreators(){ showMain();
-  setTimeout(()=>{ document.getElementById('creators').scrollIntoView({behavior:'smooth'}); },100);
+function navCreators(){
   closeMenu();
+  showMain();
+  setTimeout(function(){ var el=document.getElementById('creators'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 200);
 }
-function navAbout(){ showMain();
-  setTimeout(()=>{ document.getElementById('about').scrollIntoView({behavior:'smooth'}); },100);
+function navAbout(){
   closeMenu();
+  showMain();
+  setTimeout(function(){ var el=document.getElementById('about'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 200);
 }
-function navCollege(){ showMain();
-  setTimeout(()=>{ document.getElementById('college-info').scrollIntoView({behavior:'smooth'}); },100);
+function navCollege(){
   closeMenu();
+  showMain();
+  setTimeout(function(){ var el=document.getElementById('college-info'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 200);
 }
-function navRefresh(){ showMain();
-  setTimeout(()=>{ document.getElementById('refreshments').scrollIntoView({behavior:'smooth'}); },100);
+function navRefresh(){
   closeMenu();
+  showMain();
+  setTimeout(function(){ var el=document.getElementById('refreshments'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 200);
 }
 
 // =============================================
@@ -5228,10 +5282,19 @@ document.addEventListener('click',(e)=>{
       const y   = window.scrollY;
       const diff = y - lastY;
 
+      // Don't auto-hide navbar when on fixed panels (events/contacts)
+      // because window.scrollY stays 0 for those panels
+      var onFixedPanel = (
+        document.getElementById('events-panel') &&
+        document.getElementById('events-panel').classList.contains('panel-visible') ||
+        document.getElementById('contacts-panel') &&
+        document.getElementById('contacts-panel').classList.contains('panel-visible')
+      );
+
       // Hide navbar when scrolling DOWN past 60px; show when scrolling UP
       if(navbar){
-        if(y < 60){
-          // Always show at top of page
+        if(onFixedPanel || y < 60){
+          // Always show at top of page or on fixed panels
           navbar.classList.remove('nav-hidden');
         } else if(diff > THRESHOLD){
           // Scrolling down — hide navbar and close menu if open
@@ -5496,7 +5559,7 @@ document.addEventListener('keydown', function(e){
 <style>
 /* ── JARVIS Fab Button — Robot ── */
 #jarvis-fab{
-  position:fixed;bottom:24px;right:24px;z-index:999999;
+  position:fixed;bottom:80px;right:24px;z-index:999999;
   width:46px;height:46px;
   background:none;border:none;padding:0;
   cursor:pointer;
@@ -5538,7 +5601,7 @@ document.addEventListener('keydown', function(e){
 
 /* ── JARVIS Chat Window ── */
 #jarvis-window{
-  position:fixed;bottom:96px;right:24px;z-index:999999;
+  position:fixed;bottom:136px;right:24px;z-index:999999;
   width:min(360px,calc(100vw - 32px));
   height:min(520px,70vh);
   border-radius:20px;overflow:hidden;
@@ -5732,10 +5795,15 @@ document.addEventListener('keydown', function(e){
 .jarvis-suggestion:hover{background:rgba(88,216,255,0.14);color:#fff;}
 
 @media(max-width:480px){
-  #jarvis-fab{bottom:16px;right:16px;width:52px;height:52px;}
-  #jarvis-window{bottom:82px;right:16px;width:calc(100vw - 32px);height:min(500px,72vh);}
+  #jarvis-fab{bottom:74px;right:16px;width:52px;height:52px;}
+  #jarvis-window{bottom:136px;right:16px;width:calc(100vw - 32px);height:min(500px,72vh);}
 }
 </style>
+
+<!-- MUTE BUTTON — below chatbot -->
+<button id="mute-btn" onclick="toggleMute()" aria-label="Toggle sound" title="Mute / Unmute">
+  <i class="fas fa-volume-high" id="mute-icon"></i>
+</button>
 
 <!-- JARVIS FAB — Robot Chatbot Icon -->
 <button id="jarvis-fab" onclick="toggleJarvis()" aria-label="Open JARVIS">
@@ -6417,23 +6485,14 @@ Respond concisely and in JARVIS character (2-4 sentences unless a list is needed
 <script>
 // =============================================
 // BACK BUTTON / BROWSER HISTORY SUPPORT
-// Intercepts panel switches, tab changes, glass
-// open, and ev-card opens so the mobile back
-// button navigates within the site instead of
-// closing it.
 // =============================================
 (function(){
   'use strict';
 
-  // ── Apply a saved state object to the UI (no extra push) ──
   function applyState(state) {
     if (!state) state = { panel: 'main-page' };
-
-    // Close any expanded event cards first
     document.querySelectorAll('.ev-card.ev-active')
       .forEach(function(c){ c.classList.remove('ev-active'); });
-
-    // Show the correct panel
     var panelId = state.panel || 'main-page';
     ['main-page', 'events-panel', 'contacts-panel'].forEach(function(pid){
       var el = document.getElementById(pid);
@@ -6446,76 +6505,41 @@ Respond concisely and in JARVIS character (2-4 sentences unless a list is needed
         el.classList.remove('panel-visible');
       }
     });
-
-    // Close nav menu
     if (typeof closeMenu === 'function') closeMenu();
-
-    // Restore events sub-state
     if (panelId === 'events-panel') {
       var tabId = state.tab || 'events-overview';
       document.querySelectorAll('.tab-pane')
         .forEach(function(p){ p.classList.remove('active'); });
       var tabEl = document.getElementById(tabId);
       if (tabEl) tabEl.classList.add('active');
-
       var container = document.getElementById('glass-container');
       if (container){
         if (state.glassOpen) container.classList.add('is-open');
         else                 container.classList.remove('is-open');
       }
-
-      // Re-open an ev-card if it was open when state was pushed
       if (state.evCard){
         var evEl = document.getElementById(state.evCard);
         if (evEl) evEl.classList.add('ev-active');
       }
     }
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ── Wrap showMain ──
   var _showMain = showMain;
-  showMain = function(){
-    _showMain();
-    history.pushState({ panel: 'main-page' }, '');
-  };
+  showMain = function(){ _showMain(); history.pushState({ panel: 'main-page' }, ''); };
 
-  // ── Wrap showEvents ──
   var _showEvents = showEvents;
-  showEvents = function(){
-    _showEvents();
-    history.pushState(
-      { panel: 'events-panel', tab: 'events-overview', glassOpen: false }, ''
-    );
-  };
+  showEvents = function(){ _showEvents(); history.pushState({ panel: 'events-panel', tab: 'events-overview', glassOpen: false }, ''); };
 
-  // ── Wrap showContacts ──
   var _showContacts = showContacts;
-  showContacts = function(){
-    _showContacts();
-    history.pushState({ panel: 'contacts-panel' }, '');
-  };
+  showContacts = function(){ _showContacts(); history.pushState({ panel: 'contacts-panel' }, ''); };
 
-  // ── Wrap switchTabByName (category tab selected) ──
   var _switchTabByName = switchTabByName;
-  switchTabByName = function(tabId){
-    _switchTabByName(tabId);
-    history.pushState(
-      { panel: 'events-panel', tab: tabId, glassOpen: true }, ''
-    );
-  };
+  switchTabByName = function(tabId){ _switchTabByName(tabId); history.pushState({ panel: 'events-panel', tab: tabId, glassOpen: true }, ''); };
 
-  // ── Wrap showEventsOverview (back-to-overview button) ──
   var _showEventsOverview = showEventsOverview;
-  showEventsOverview = function(){
-    _showEventsOverview();
-    history.pushState(
-      { panel: 'events-panel', tab: 'events-overview', glassOpen: true }, ''
-    );
-  };
+  showEventsOverview = function(){ _showEventsOverview(); history.pushState({ panel: 'events-panel', tab: 'events-overview', glassOpen: true }, ''); };
 
-  // ── Wrap handleGlassContainerClick (first tap opens glass) ──
   var _handleGlassContainerClick = handleGlassContainerClick;
   handleGlassContainerClick = function(e){
     var container = document.getElementById('glass-container');
@@ -6524,52 +6548,31 @@ Respond concisely and in JARVIS character (2-4 sentences unless a list is needed
     if (!wasOpen && container && container.classList.contains('is-open')){
       var activePane = document.querySelector('.tab-pane.active');
       var currentTab = activePane ? activePane.id : 'events-overview';
-      if (currentTab === 'events-overview'){
-        history.pushState(
-          { panel: 'events-panel', tab: 'events-overview', glassOpen: true }, ''
-        );
-      }
+      if (currentTab === 'events-overview')
+        history.pushState({ panel: 'events-panel', tab: 'events-overview', glassOpen: true }, '');
     }
   };
 
-  // ── Wrap toggleEvCard (opening an event detail pushes state) ──
   var _toggleEvCard = toggleEvCard;
   toggleEvCard = function(card){
     _toggleEvCard(card);
     if (card.classList.contains('ev-active')){
       var activePane = document.querySelector('.tab-pane.active');
-      history.pushState({
-        panel:     'events-panel',
-        tab:       activePane ? activePane.id : null,
-        glassOpen: true,
-        evCard:    card.id || null
-      }, '');
+      history.pushState({ panel:'events-panel', tab: activePane ? activePane.id : null, glassOpen:true, evCard: card.id||null }, '');
     }
   };
 
-  // ── Wrap closeEvCard (x button on ev-card: pop back) ──
   var _closeEvCard = closeEvCard;
-  closeEvCard = function(btn){
-    _closeEvCard(btn);
-    history.back();
-  };
+  closeEvCard = function(btn){ _closeEvCard(btn); history.back(); };
 
-  // ── popstate: browser back/forward pressed ──
-  window.addEventListener('popstate', function(e){
-    applyState(e.state);
-  });
+  window.addEventListener('popstate', function(e){ applyState(e.state); });
 
-  // ── Seed history so the very first back press doesn't leave the page ──
   (function seed(){
-    if (document.readyState === 'loading'){
-      document.addEventListener('DOMContentLoaded', function(){
-        history.replaceState({ panel: 'main-page' }, '');
-      });
-    } else {
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', function(){ history.replaceState({ panel: 'main-page' }, ''); });
+    else
       history.replaceState({ panel: 'main-page' }, '');
-    }
   })();
-
 })();
 </script>
 </body>
