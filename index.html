@@ -353,28 +353,7 @@ img{max-width:100%;display:block;-webkit-touch-callout:none;-webkit-user-drag:no
   background:linear-gradient(90deg,var(--red-bright),var(--gold-bright));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-/* ── Mute Button — fixed below JARVIS chatbot ── */
-#mute-btn{
-  position:fixed;
-  bottom:24px;right:24px;
-  z-index:999998;
-  background:rgba(5,5,8,0.82);
-  border:1px solid rgba(239,35,60,0.4);
-  cursor:pointer;
-  width:36px;height:36px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--red-bright);font-size:14px;
-  transition:background 0.2s,border-color 0.2s,color 0.2s,transform 0.2s;
-  outline:none;-webkit-tap-highlight-color:transparent;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  box-shadow:0 2px 12px rgba(0,0,0,0.5);
-}
-#mute-btn:hover{ background:rgba(239,35,60,0.15); transform:scale(1.1); }
-#mute-btn.muted{ border-color:rgba(200,150,12,0.5); color:var(--gold); }
-#mute-btn.muted:hover{ background:rgba(200,150,12,0.12); }
-@media(max-width:480px){
-  #mute-btn{ width:32px;height:32px;font-size:12px;bottom:16px;right:16px; }
-}
+/* ── Mute Button — fixed below JARVIS chatbot ── *
 
 #hamburger{
   background:none;border:none;cursor:pointer;
